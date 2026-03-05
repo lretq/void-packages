@@ -1,0 +1,25 @@
+# Template file for 'ananicy-cpp'
+pkgname=ananicy-cpp
+# last release fails to build with modern clang; use git snapshot with upstream fixes
+version=1.1.1+20260305
+revision=1
+_commit="7fb9ed828edad85fe89359feafd8565831cb342f"
+build_style=cmake
+configure_args="-DENABLE_SYSTEMD=OFF -DUSE_EXTERNAL_SPDLOG=ON -DUSE_EXTERNAL_FMTLIB=ON -DUSE_EXTERNAL_JSON=ON -DUSE_BPF_PROC_IMPL=ON -DBPF_BUILD_LIBBPF=OFF -DENABLE_ANANICY_TESTS=ON -DVERSION=${version}"
+makedepends="git bpftool libbpf-devel elfutils-devel clang fmt-devel spdlog json-c++"
+short_desc="Ananicy rewritten in C++ for much lower CPU and memory usage"
+maintainer="Vincent Schweiger <vincent.schweiger@icloud.com>"
+license="GPL-3.0-or-later"
+homepage="https://gitlab.com/ananicy-cpp/ananicy-cpp"
+#distfiles="https://gitlab.com/ananicy-cpp/ananicy-cpp/-/archive/v${version}/ananicy-cpp-v${version}.tar.gz"
+distfiles="https://gitlab.com/ananicy-cpp/ananicy-cpp/-/archive/$_commit/ananicy-cpp-$_commit.tar.gz"
+checksum=c87bcd6f428922a7820108cb7a168065acd6bce4f974bdf05b823beaf2b55f34
+
+post_install() {
+	vsv ananicy-cpp
+}
+
+do_check() {
+	./build/src/tests/test-core
+	./build/src/tests/test-utility --test-case-exclude="Process Info"
+}
