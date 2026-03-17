@@ -1,0 +1,14 @@
+# Template file for 'profile-sync-daemon'
+pkgname=profile-sync-daemon
+version=7.00
+revision=1
+build_style=gnu-makefile
+short_desc="Symlink and sync browser profile dirs to RAM"
+maintainer="Vincent Schweiger <vincent.schweiger@xolley.de>"
+license="MIT"
+homepage="https://github.com/graysky2/profile-sync-daemon"
+distfiles="https://github.com/graysky2/profile-sync-daemon/archive/refs/tags/v${version}.tar.gz"
+checksum="99bc5b26a6ca8014a5aea3bc86fce4b90c144c11361a54a413f2e61ac575b74e"
+
+make_install_target="install-bin install-man"
+
