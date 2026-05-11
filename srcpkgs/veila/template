@@ -1,0 +1,30 @@
+# Template file for 'veila'
+pkgname=veila
+version=0.3.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config"
+makedepends="pam-devel wayland-devel libxkbcommon-devel"
+depends="elogind"
+short_desc="Secure, elegant and fast Wayland screen locker"
+maintainer="Vincent Schweiger <vincent.schweiger@icloud.com>"
+license="GPL-3.0-or-later"
+homepage="https://naurissteins.com/veila"
+distfiles="https://github.com/naurissteins/Veila/archive/refs/tags/${version}.tar.gz"
+checksum=52affd44260b4393b3f1c6b30d8382487efb114d0ec4a3a737ffd9e0f2b08f1a
+
+# cargo install does not support workspaces
+# alternative: specify the wanted packages only
+# requires setting do_* manually, but avoids useless build time
+do_install() {
+	# POSIX for find … -maxdepth 1 -executable
+	find target/"$RUST_TARGET"/release \
+		! -path target/"$RUST_TARGET"/release -prune \
+		-type f -perm -0100 -name 'veila*' \
+		-exec install -Dm755 -t "$PKGDESTDIR"/usr/bin '{}' \+
+
+	# copy the included themes, fonts, icons
+	vmkdir /usr/share/veila
+	vcopy assets/* /usr/share/veila
+	rm -r "${DESTDIR}"/usr/share/veila/systemd
+}
